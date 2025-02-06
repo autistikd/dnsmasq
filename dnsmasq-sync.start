@@ -1,0 +1,4 @@
+#/!bin/bash
+
+curl -L https://raw.githubusercontent.com/autistikd/dnsmasq/main/dnsmasq.conf -o /etc/dn
+rc-service dnsmasq restart
