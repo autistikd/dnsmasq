@@ -1,0 +1,30 @@
+#!/bin/sh
+
+LOGFILE="/var/log/dnsmasq_update.log"
+URL="https://raw.githubusercontent.com/autistikd/dnsmasq/main/dnsmasq.conf"
+TARGET="/etc/dnsmasq.conf"
+TIMEOUT=5
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOGFILE"
+}
+
+log "Starting dnsmasq.conf update check..."
+
+SECONDS=0
+while ! wget --spider --timeout=2 --tries=1 http://google.com 2>/dev/null; do
+    if [ $SECONDS -ge $TIMEOUT ]; then
+        log "No internet after $TIMEOUT seconds. Skipping update."
+        exit 0
+    fi
+    sleep 1
+done
+
+log "Internet detected. Downloading latest dnsmasq.conf from $URL"
+if wget -q -O "$TARGET" "$URL"; then
+    log "Successfully downloaded and updated $TARGET"
+else
+    log "Failed to download $URL"
+fi
+
+rc-service dnsmasq restart
