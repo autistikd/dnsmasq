@@ -20,11 +20,11 @@ while ! wget --spider --timeout=2 --tries=1 http://google.com 2>/dev/null; do
     sleep 1
 done
 
-log "Internet detected. Downloading latest dnsmasq.conf from $URL"
+log "Internet ok. Downloading latest dnsmasq.conf from $URL"
 if wget -q -O "$TARGET" "$URL"; then
     log "Successfully downloaded and updated $TARGET"
 else
-    log "Failed to download $URL"
+    log "KO. Failed to download $URL"
 fi
 
 rc-service dnsmasq restart
